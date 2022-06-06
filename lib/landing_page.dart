@@ -1,6 +1,8 @@
+// import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:gosend/logInPage.dart';
-import 'package:gosend/signIn.dart';
+import 'package:wesend/login_page.dart';
+import 'package:wesend/sign_in.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -13,40 +15,42 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style = ElevatedButton.styleFrom(
-      primary: Color.fromARGB(255, 160, 149, 237),
-      fixedSize: Size.fromWidth(278),
-    );
+        padding: const EdgeInsets.all(20),
+        textStyle: const TextStyle(fontSize: 24),
+        primary: const Color.fromARGB(255, 160, 149, 237),
+        fixedSize: const Size.fromWidth(378),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)));
 
     return Scaffold(
       body: Center(
         child: Container(
-          color: Color.fromARGB(255, 184, 181, 255),
+          color: const Color.fromARGB(255, 184, 181, 255),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/driver-icon.png'),
               Container(
-                  margin: EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.only(top: 15),
                   child: (ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return LogInPage();
+                          return const LogInPage();
                         }));
                       },
                       style: style,
-                      child: Text("MASUK")))),
+                      child: const Text("MASUK")))),
               Container(
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: (ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return SignInPage();
+                          return const SignInPage();
                         }));
                       },
                       style: style,
-                      child: Text("DAFTAR")))),
+                      child: const Text("DAFTAR")))),
             ],
           ),
         ),

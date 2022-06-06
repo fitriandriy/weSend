@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: Text("Anonymous Method"),
+            title: const Text("Anonymous Method"),
           ),
           body: Center(
             child: Column(
@@ -151,7 +151,7 @@ class _MyAppState extends State<MyApp> {
                         message = "Tombol sudah ditekan.";
                       });
                     },
-                    child: Text("Tekan Saya!"))
+                    child: const Text("Tekan Saya!"))
               ],
             ),
           )),
