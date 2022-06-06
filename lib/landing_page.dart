@@ -1,8 +1,9 @@
 // import 'dart:ui';
-
+import 'package:wesend/auth/register_page.dart';
+import 'package:wesend/auth/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:wesend/login_page.dart';
-import 'package:wesend/sign_in.dart';
+// import 'package:wesend/login_page.dart';
+// import 'package:wesend/sign_in.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _LandingPageState extends State<LandingPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return const LogInPage();
+                          return LoginPage();
                         }));
                       },
                       style: style,
@@ -46,7 +47,7 @@ class _LandingPageState extends State<LandingPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return const SignInPage();
+                          return RegisterPage();
                         }));
                       },
                       style: style,

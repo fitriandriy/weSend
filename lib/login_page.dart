@@ -5,7 +5,6 @@ import 'package:wesend/sign_in.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({Key? key}) : super(key: key);
-
   @override
   State<LogInPage> createState() => _LogInPageState();
 }
