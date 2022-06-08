@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wesend/customers/buat_pesanan.dart';
 import 'package:wesend/customers/detile_pesanan.dart';
 import 'package:wesend/customers/chat.dart';
-import 'package:wesend/customers/profile.dart';
+
+// import 'package:wesend/customers/profile.dart';
 
 class HomePageCustomer extends StatefulWidget {
   const HomePageCustomer({Key? key}) : super(key: key);
@@ -35,9 +36,9 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
   }
 
   toProfilePage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ProfileCustomer();
-    }));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   return const ProfileCustomer();
+    // }));
   }
 
   void _onItemTapped(int index) {

@@ -3,6 +3,7 @@ import 'package:wesend/customers/homepage.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BuatPesanan extends StatefulWidget {
   const BuatPesanan({Key? key}) : super(key: key);
@@ -10,6 +11,13 @@ class BuatPesanan extends StatefulWidget {
   @override
   State<BuatPesanan> createState() => _BuatPesananState();
 }
+
+final db = FirebaseFirestore.instance;
+String? penjemputan;
+String? tujuan;
+String? penerima;
+String? noTelepon;
+String? alamat;
 
 class _BuatPesananState extends State<BuatPesanan> {
   final ButtonStyle style = ElevatedButton.styleFrom(
@@ -96,23 +104,29 @@ class _BuatPesananState extends State<BuatPesanan> {
                               children: [
                                 Container(
                                   color: Colors.white,
-                                  child: const TextField(
+                                  child: TextField(
                                     obscureText: false,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Dikirim dari'),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
+                                    onChanged: (String _val) {
+                                      penjemputan = _val;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 10),
                                 Container(
                                   color: Colors.white,
-                                  child: const TextField(
+                                  child: TextField(
                                     obscureText: false,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Alamat tujuan'),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
+                                    onChanged: (String _val) {
+                                      tujuan = _val;
+                                    },
                                   ),
                                 ),
                               ],
@@ -136,34 +150,43 @@ class _BuatPesananState extends State<BuatPesanan> {
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Nama Lengkap'),
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                penerima = _val;
+                              },
                             ),
                           ),
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Nomor Handphone'),
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                noTelepon = _val;
+                              },
                             ),
                           ),
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Alamat Lengkap'),
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                alamat = _val;
+                              },
                             ),
                           ),
                           Container(
@@ -202,6 +225,13 @@ class _BuatPesananState extends State<BuatPesanan> {
                           ),
                           ElevatedButton(
                             onPressed: () => {
+                              db.collection('orders').add({
+                                'penjemputan': penjemputan,
+                                'tujuan': tujuan,
+                                'penerima': penerima,
+                                'no_telepon': noTelepon,
+                                'alamat': alamat,
+                              }),
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return const HomePageCustomer();

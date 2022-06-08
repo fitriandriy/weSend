@@ -3,12 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wesend/auth/profile_page.dart';
 import 'package:wesend/auth/validator.dart';
 import 'package:wesend/auth/fire_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
+
+final db = FirebaseFirestore.instance;
+String? nama;
+String? email;
+String? password;
+String? alamat;
+String? noTelepon;
 
 class _RegisterPageState extends State<RegisterPage> {
   final _registerFormKey = GlobalKey<FormState>();
@@ -73,6 +81,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
+                        onChanged: (String _val) {
+                          nama = _val;
+                        },
                       ),
                       const SizedBox(height: 16.0),
                       TextFormField(
@@ -94,6 +105,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
+                        onChanged: (String _val) {
+                          email = _val;
+                        },
                       ),
                       const SizedBox(height: 16.0),
                       TextFormField(
@@ -116,6 +130,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
+                        onChanged: (String _val) {
+                          password = _val;
+                        },
                       ),
                       const SizedBox(height: 16.0),
                       TextFormField(
@@ -138,6 +155,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
+                        onChanged: (String _val) {
+                          alamat = _val;
+                        },
                       ),
                       const SizedBox(height: 16.0),
                       TextFormField(
@@ -160,6 +180,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         style: const TextStyle(fontSize: 20),
+                        onChanged: (String _val) {
+                          noTelepon = _val;
+                        },
                       ),
                       const SizedBox(height: 32.0),
                       _isProcessing
@@ -172,6 +195,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                     onPressed: () async {
                                       setState(() {
                                         _isProcessing = true;
+                                      });
+
+                                      db.collection('customers').add({
+                                        'nama': nama,
+                                        'email': email,
+                                        'password': password,
+                                        'alamat': alamat,
+                                        'no_telepon': noTelepon
                                       });
 
                                       if (_registerFormKey.currentState!

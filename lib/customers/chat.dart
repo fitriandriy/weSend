@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wesend/crud.dart';
 // import 'package:google_fonts/google_fonts.dart';
 import 'package:wesend/customers/homepage.dart';
-import 'package:wesend/customers/profile.dart';
+// import 'package:wesend/customers/profile.dart';
 // import 'package:wesend/customers/maps.dart';
 
 class Chat extends StatefulWidget {
@@ -34,9 +35,9 @@ class _ChatState extends State<Chat> {
   }
 
   toProfilePage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ProfileCustomer();
-    }));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   return const ProfileCustomer();
+    // }));
   }
 
   void _onItemTapped(int index) {
@@ -65,28 +66,34 @@ class _ChatState extends State<Chat> {
       body: Center(
         child: ListView(
           addAutomaticKeepAlives: mounted,
-          children: const [
+          children: [
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: ListTile(
-                  tileColor: Color.fromARGB(255, 255, 255, 255),
-                  title: Text(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return const Crud();
+                    }));
+                  },
+                  tileColor: const Color.fromARGB(255, 255, 255, 255),
+                  title: const Text(
                     "Na Jaemin",
                     style: TextStyle(
                         backgroundColor: Color.fromARGB(255, 147, 237, 148),
                         fontSize: 24),
                   ),
-                  subtitle: Text(
+                  subtitle: const Text(
                     "Haloo, barang diantar ke rumah dekat jalan besar ya",
                     style: TextStyle(fontSize: 20),
                   ),
-                  leading: SizedBox(
+                  leading: const SizedBox(
                     width: 50,
                     height: 50,
                     child: Icon(Icons.person),
                   )),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10.0),
               child: ListTile(
                   tileColor: Color.fromARGB(255, 255, 255, 255),
@@ -106,7 +113,7 @@ class _ChatState extends State<Chat> {
                     child: Icon(Icons.person),
                   )),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10.0),
               child: ListTile(
                   tileColor: Color.fromARGB(255, 255, 255, 255),

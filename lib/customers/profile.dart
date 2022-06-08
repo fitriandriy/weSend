@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:wesend/customers/homepage.dart';
 import 'package:wesend/customers/chat.dart';
-import 'package:wesend/landing_page.dart';
+// import 'package:wesend/landing_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wesend/auth/login_page.dart';
+// import 'package:wesend/auth/fire_auth.dart';
 
-void main() {
-  runApp(const ProfileCustomer());
-}
+// void main() {
+//   runApp(const ProfileCustomer());
+// }
 
 class ProfileCustomer extends StatefulWidget {
-  const ProfileCustomer({Key? key}) : super(key: key);
-
+  // const ProfileCustomer({Key? key, required this.user}) : super(key: key);
+  final User user;
+  const ProfileCustomer({required this.user});
   @override
   State<ProfileCustomer> createState() => _ProfileCustomerState();
 }
 
 class _ProfileCustomerState extends State<ProfileCustomer> {
+  bool _isSigningOut = false;
+
+  late User _currentUser;
+  // late User user;
+
   final ButtonStyle style = ElevatedButton.styleFrom(
       padding: const EdgeInsets.all(15),
       textStyle: const TextStyle(fontSize: 20),
@@ -34,11 +43,11 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
     }));
   }
 
-  toProfilePage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ProfileCustomer();
-    }));
-  }
+  // toProfilePage() {
+  //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+  //     return ProfileCustomer();
+  //   }));
+  // }
 
   int _selectedIndex = 2;
 
@@ -52,8 +61,14 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
     } else if (_selectedIndex == 1) {
       toChatPage();
     } else if (_selectedIndex == 2) {
-      toProfilePage();
+      // toProfilePage();
     }
+  }
+
+  @override
+  void initState() {
+    _currentUser = widget.user;
+    super.initState();
   }
 
   @override
@@ -82,20 +97,20 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Fitri Andriyani",
-                      style: TextStyle(fontSize: 28, color: Colors.black),
+                    Text(
+                      'Nama: ${_currentUser.displayName}',
+                      style: const TextStyle(fontSize: 28, color: Colors.black),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
+                        children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 4.0),
+                            padding: const EdgeInsets.only(left: 4.0),
                             child: Text(
-                              'fitriandri@gmail.com',
-                              style: TextStyle(
+                              '${_currentUser.email}',
+                              style: const TextStyle(
                                   color: Colors.black, fontSize: 20.0),
                             ),
                           )
@@ -124,26 +139,26 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                   // color: Color.fromARGB(255, 167, 81, 81),
 
                   ),
-              child: Column(children: const [
+              child: Column(children: [
                 ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Nama', style: TextStyle(fontSize: 20)),
-                    subtitle: Text('Fitri Andriyani',
-                        style: TextStyle(fontSize: 20))),
-                Divider(),
+                    leading: const Icon(Icons.person),
+                    title: const Text('Nama', style: TextStyle(fontSize: 20)),
+                    subtitle: Text('Nama: ${_currentUser.displayName}',
+                        style: const TextStyle(fontSize: 20))),
+                const Divider(),
                 ListTile(
-                    leading: Icon(Icons.email),
-                    title: Text('Email', style: TextStyle(fontSize: 20)),
-                    subtitle: Text('fitriandri@gmail.com',
-                        style: TextStyle(fontSize: 20))),
-                Divider(),
-                ListTile(
+                    leading: const Icon(Icons.email),
+                    title: const Text('Email', style: TextStyle(fontSize: 20)),
+                    subtitle: Text('Email: ${_currentUser.email}',
+                        style: const TextStyle(fontSize: 20))),
+                const Divider(),
+                const ListTile(
                     leading: Icon(Icons.phone),
                     title: Text('No. Telepon', style: TextStyle(fontSize: 20)),
                     subtitle:
                         Text('+6285232128433', style: TextStyle(fontSize: 20))),
-                Divider(),
-                ListTile(
+                const Divider(),
+                const ListTile(
                     leading: Icon(Icons.home),
                     title: Text('Alamat', style: TextStyle(fontSize: 20)),
                     subtitle:
@@ -151,14 +166,45 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
               ]),
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const LandingPage();
-                }));
-              },
-              style: style,
-              child: const Text("Logout")),
+          // ElevatedButton(
+          //     onPressed: () async {
+          //       setState(() {
+          //         _isSigningOut = true;
+          //       });
+          //       await FirebaseAuth.instance.signOut();
+          //       setState(() {
+          //         _isSigningOut = false;
+          //       });
+          //       Navigator.of(context).pushReplacement(
+          //         MaterialPageRoute(
+          //           builder: (context) => LoginPage(),
+          //         ),
+          //       );
+          //     },
+          //     child: Text('Log Out'),
+          //     style: style),
+
+          _isSigningOut
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  onPressed: () async {
+                    setState(() {
+                      _isSigningOut = true;
+                    });
+                    await FirebaseAuth.instance.signOut();
+                    setState(() {
+                      _isSigningOut = false;
+                    });
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('LOG OUT'),
+                  style: style,
+                ),
+
           const SizedBox(
             height: 365,
           ),

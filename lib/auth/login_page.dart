@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wesend/auth/profile_page.dart';
+import 'package:wesend/customers/profile.dart';
 import 'package:wesend/auth/validator.dart';
 import 'package:wesend/auth/fire_auth.dart';
 import 'package:wesend/auth/register_page.dart';
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ProfilePage(
+          builder: (context) => ProfileCustomer(
             user: user,
           ),
         ),
@@ -151,7 +151,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   .pushReplacement(
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ProfilePage(user: user),
+                                                      ProfileCustomer(
+                                                          user: user),
                                                 ),
                                               );
                                             }

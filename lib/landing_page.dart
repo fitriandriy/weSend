@@ -36,7 +36,7 @@ class _LandingPageState extends State<LandingPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return LoginPage();
+                          return const LoginPage();
                         }));
                       },
                       style: style,
@@ -47,7 +47,7 @@ class _LandingPageState extends State<LandingPage> {
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return RegisterPage();
+                          return const RegisterPage();
                         }));
                       },
                       style: style,
