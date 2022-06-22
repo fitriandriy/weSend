@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wesend/auth/login_page.dart';
 import 'package:wesend/customers/buat_pesanan.dart';
 import 'package:wesend/customers/detile_pesanan.dart';
 import 'package:wesend/customers/chat.dart';
-import 'package:wesend/customers/profile.dart';
 
 class HomePageCustomer extends StatefulWidget {
   const HomePageCustomer({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
 
   toProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ProfileCustomer();
+      return const LoginPage();
     }));
   }
 
@@ -53,11 +53,6 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
       toProfilePage();
     }
   }
-
-  // static const List<Widget> _widgetOptions = <Widget>[
-  //   HomePageCustomer(),
-  //   Chat(),
-  // ];
 
   @override
   Widget build(BuildContext context) {

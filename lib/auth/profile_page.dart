@@ -1,19 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wesend/auth/login_page.dart';
-import 'package:wesend/auth/fire_auth.dart';
+// import 'package:wesend/auth/fire_auth.dart';
+import 'package:wesend/customers/homepage.dart';
+import 'package:wesend/customers/chat.dart';
+// import 'package:wesend/landing_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
-
-  const ProfilePage({required this.user});
+  const ProfilePage({required this.user, Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _isSendingVerification = false;
+  // bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
   late User _currentUser;
@@ -24,77 +26,140 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
+  final ButtonStyle style = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.all(15),
+      textStyle: const TextStyle(fontSize: 20),
+      primary: const Color.fromARGB(255, 160, 149, 237),
+      fixedSize: const Size.fromWidth(158),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)));
+
+  toHomePage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const HomePageCustomer();
+    }));
+  }
+
+  toChatPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const Chat();
+    }));
+  }
+
+  toProfilePage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return ProfilePage(user: _currentUser);
+    }));
+  }
+
+  int _selectedIndex = 2;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (_selectedIndex == 0) {
+      toHomePage();
+    } else if (_selectedIndex == 1) {
+      toChatPage();
+    } else if (_selectedIndex == 2) {
+      toProfilePage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text("PROFIL", style: TextStyle(fontSize: 28)),
+        backgroundColor: const Color.fromARGB(255, 160, 149, 237),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
-            Text(
-              'NAME: ${_currentUser.displayName}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'EMAIL: ${_currentUser.email}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(height: 16.0),
-            _currentUser.emailVerified
-                ? Text(
-                    'Email verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.green),
-                  )
-                : Text(
-                    'Email not verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.red),
-                  ),
-            SizedBox(height: 16.0),
-            _isSendingVerification
-                ? CircularProgressIndicator()
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
+            Row(
+              children: [
+                const Padding(
+                    padding: EdgeInsets.only(left: (10.0), top: (20.0)),
+                    child: Icon(Icons.account_circle_rounded,
+                        size: 80, color: Color.fromARGB(255, 135, 134, 134))),
+                Padding(
+                  padding: const EdgeInsets.only(left: 24.0, top: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            _isSendingVerification = true;
-                          });
-                          await _currentUser.sendEmailVerification();
-                          setState(() {
-                            _isSendingVerification = false;
-                          });
-                        },
-                        child: Text('Verify email'),
+                      Text(
+                        "${_currentUser.displayName}",
+                        style:
+                            const TextStyle(fontSize: 28, color: Colors.black),
                       ),
-                      SizedBox(width: 8.0),
-                      IconButton(
-                        icon: Icon(Icons.refresh),
-                        onPressed: () async {
-                          User? user = await FireAuth.refreshUser(_currentUser);
-
-                          if (user != null) {
-                            setState(() {
-                              _currentUser = user;
-                            });
-                          }
-                        },
-                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: Text(
+                                '${_currentUser.email}',
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 20.0),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
-            SizedBox(height: 16.0),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text('Tentang',
+                  style: TextStyle(fontSize: 20), textAlign: TextAlign.left),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 160, 149, 237),
+                        width: 2)),
+                child: Column(children: [
+                  ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Nama', style: TextStyle(fontSize: 20)),
+                      subtitle: Text('${_currentUser.displayName}',
+                          style: const TextStyle(fontSize: 20))),
+                  const Divider(),
+                  ListTile(
+                      leading: const Icon(Icons.email),
+                      title:
+                          const Text('Email', style: TextStyle(fontSize: 20)),
+                      subtitle: Text('${_currentUser.email}',
+                          style: const TextStyle(fontSize: 20))),
+                  const Divider(),
+                  const ListTile(
+                      leading: Icon(Icons.phone),
+                      title:
+                          Text('No. Telepon', style: TextStyle(fontSize: 20)),
+                      subtitle: Text('+6285232128433',
+                          style: TextStyle(fontSize: 20))),
+                  const Divider(),
+                  const ListTile(
+                      leading: Icon(Icons.home),
+                      title: Text('Alamat', style: TextStyle(fontSize: 20)),
+                      subtitle:
+                          Text('Jl. Menanjak', style: TextStyle(fontSize: 20))),
+                ]),
+              ),
+            ),
+
+            // LOGOUT BUTTON
             _isSigningOut
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () async {
                       setState(() {
@@ -106,21 +171,32 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         ),
                       );
                     },
-                    child: Text('Sign out'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
+                    child: const Text('KELUAR'),
+                    style: style,
+                  )
           ],
         ),
       ),
+
+      // BOTTOM NAVBAR
+      bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color.fromARGB(255, 160, 149, 237),
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home, size: 40), label: 'home'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.wechat, size: 40), label: 'chat'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.manage_accounts, size: 40), label: 'account'),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.white,
+          onTap: _onItemTapped),
     );
   }
 }

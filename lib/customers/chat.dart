@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
+import 'package:wesend/auth/login_page.dart';
 import 'package:wesend/customers/homepage.dart';
-import 'package:wesend/customers/profile.dart';
-// import 'package:wesend/customers/maps.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -35,7 +34,7 @@ class _ChatState extends State<Chat> {
 
   toProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const ProfileCustomer();
+      return const LoginPage();
     }));
   }
 
