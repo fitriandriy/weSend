@@ -4,6 +4,7 @@ import 'package:wesend/auth/login_page.dart';
 import 'package:wesend/customers/buat_pesanan.dart';
 import 'package:wesend/customers/detile_pesanan.dart';
 import 'package:wesend/customers/chat.dart';
+import 'package:wesend/maps/location_tracking.dart';
 
 class HomePageCustomer extends StatefulWidget {
   const HomePageCustomer({Key? key}) : super(key: key);
@@ -99,7 +100,12 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                                 ),
                                 Expanded(
                                     child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return const LocationTracking();
+                                    }));
+                                  },
                                   child: const Text('JELAJAHI'),
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(15),
