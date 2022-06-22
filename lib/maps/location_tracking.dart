@@ -19,11 +19,11 @@ class _LocationTrackingState extends State<LocationTracking> {
   LatLng sourceLocation = const LatLng(28.432864, 77.002563);
   LatLng destinationLatlng = const LatLng(28.431626, 77.002475);
 
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
-  Set<Marker> _marker = Set<Marker>();
+  final Set<Marker> _marker = <Marker>{};
 
-  Set<Polyline> _polylines = Set<Polyline>();
+  final Set<Polyline> _polylines = <Polyline>{};
   List<LatLng> polylineCoordinates = [];
   late PolylinePoints polylinePoints;
 
