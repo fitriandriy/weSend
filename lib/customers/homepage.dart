@@ -5,6 +5,7 @@ import 'package:wesend/customers/buat_pesanan.dart';
 import 'package:wesend/customers/detile_pesanan.dart';
 import 'package:wesend/customers/chat.dart';
 import 'package:wesend/maps/location_tracking.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePageCustomer extends StatefulWidget {
   const HomePageCustomer({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
       textStyle: const TextStyle(fontSize: 20),
       primary: const Color.fromARGB(255, 160, 149, 237),
       fixedSize: const Size.fromWidth(278),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)));
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)));
 
   int _selectedIndex = 0;
 
@@ -87,15 +88,19 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Expanded(
+                                // FITUR MAPS
+                                Expanded(
                                   flex: 3,
                                   child: TextField(
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Pilih lokasi saat ini',
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      labelText: 'Lokasimu sekarang',
+                                      hintText: 'Alamat lengkap penjemputan',
                                     ),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
                                 Expanded(
@@ -108,7 +113,7 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                                   },
                                   child: const Text('JELAJAHI'),
                                   style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(15),
+                                    padding: const EdgeInsets.all(19),
                                     textStyle: const TextStyle(fontSize: 20),
                                     primary: const Color.fromARGB(
                                         255, 160, 149, 237),
@@ -118,6 +123,8 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                               ],
                             ),
                           ),
+
+                          // TOMBOL PESAN
                           ElevatedButton(
                             style: style,
                             child: const Text("PESAN SEKARANG"),
@@ -131,69 +138,94 @@ class _HomePageCustomerState extends State<HomePageCustomer> {
                         ],
                       ),
                     ))),
+
+            // TEXT
             Text(
               "\nLihat pesananmu sebelumnya\n",
               style: TextStyle(fontSize: 20, color: Colors.grey[600]),
             ),
+
+            // LIST PESANAN
             Positioned(
-                child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: const Text("New",
-                        style: TextStyle(
-                            backgroundColor: Color.fromARGB(255, 255, 161, 161),
-                            fontSize: 20)),
-                    subtitle: const Text(
-                        "Nama: Fitri\nAlamat: Temuguruh\nTujuan: Semu\nBiaya: Rp20.000\n",
-                        style: TextStyle(fontSize: 20)),
-                    leading: const SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.calendar_today),
+              child: StreamBuilder(
+                // Reading Items form our Database Using the StreamBuilder widget
+                stream: db.collection('orders').snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  // NAH BAGIAN INI BUAT NAMPILIN TO DO NYA
+                  return SizedBox(
+                    height: 550,
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data?.docs.length,
+                      itemBuilder: (context, int index) {
+                        DocumentSnapshot documentSnapshot =
+                            snapshot.data.docs[index];
+                        return Container(
+                          margin: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(stops: [
+                              0.02,
+                              0.02
+                            ], colors: [
+                              Color.fromARGB(255, 160, 149, 237),
+                              Colors.white
+                            ]),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(6.0)),
+                          ),
+
+                          // LIST TILE
+                          child: ListTile(
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Image.asset('images/distance (1).png'),
+                            ),
+                            title: const Text('Driver '),
+                            isThreeLine: true,
+                            subtitle: Text('dari ' +
+                                documentSnapshot['penjemputan'] +
+                                '\nmenuju ' +
+                                documentSnapshot['tujuan']),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetilePesananCust(index: index)));
+                            },
+
+                            // INI ICON BUAT DELETE
+                            trailing: IconButton(
+                              icon: const Icon(
+                                Icons.delete_outline,
+                              ),
+                              onPressed: () {
+                                // Here We Will Add The Delete Feature
+                                db
+                                    .collection('todos')
+                                    .doc(documentSnapshot.id)
+                                    .delete();
+                              },
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    trailing: const Icon(Icons.more_vert),
-                    isThreeLine: true,
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const DetilePesananCust();
-                      }));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text(
-                      "Barang Sampai",
-                      style: TextStyle(
-                          backgroundColor: Color.fromARGB(255, 147, 237, 148),
-                          fontSize: 20),
-                    ),
-                    subtitle: const Text(
-                      "Nama: Fitri\nAlamat: Temuguruh\nTujuan: Semu\nBiaya: Rp20.000",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    leading: const SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.calendar_today),
-                    ),
-                    trailing: const Icon(Icons.more_vert),
-                    isThreeLine: true,
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const DetilePesananCust();
-                      }));
-                    },
-                  ),
-                ],
+                  );
+                },
               ),
-            )),
+            ),
           ],
         ),
       ),
+
+      // BOTTOM NAVIGATION
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: const Color.fromARGB(255, 160, 149, 237),

@@ -3,13 +3,22 @@ import 'package:wesend/customers/homepage.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BuatPesanan extends StatefulWidget {
   const BuatPesanan({Key? key}) : super(key: key);
-
   @override
   State<BuatPesanan> createState() => _BuatPesananState();
 }
+
+final db = FirebaseFirestore.instance;
+String? value;
+String? dikirimDari;
+String? alamatTujuan;
+String? namaLengkap;
+String? nomorHp;
+String? alamatLengkap;
+File? fotoBarang;
 
 class _BuatPesananState extends State<BuatPesanan> {
   final ButtonStyle style = ElevatedButton.styleFrom(
@@ -78,41 +87,62 @@ class _BuatPesananState extends State<BuatPesanan> {
                 top: 10,
                 left: 10,
                 child: Container(
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 169, 159, 231),
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 160, 149, 237),
+                          width: 2,
+                        )
+                        // color: Color.fromARGB(255, 167, 81, 81),
+
+                        ),
                     height: 230,
                     width: 580,
-                    color: const Color.fromARGB(255, 169, 159, 231),
-                    padding: const EdgeInsets.all(20),
+                    // color: const Color.fromARGB(255, 169, 159, 231),
+                    // padding: const EdgeInsets.all(20),
                     child: Center(
                       child: Column(
                         children: [
+                          const SizedBox(height: 15),
                           const Text("Masukan Data Barang",
                               style: TextStyle(
                                   fontSize: 24,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 15),
                           Container(
                             margin: const EdgeInsets.all(10),
                             child: Column(
                               children: [
+                                // DIKIRIM DARI
                                 Container(
                                   color: Colors.white,
-                                  child: const TextField(
+                                  child: TextField(
                                     obscureText: false,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Dikirim dari'),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
+                                    onChanged: (String _val) {
+                                      dikirimDari = _val;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(height: 10),
+
+                                // ALAMAT TUJUAN
                                 Container(
                                   color: Colors.white,
-                                  child: const TextField(
+                                  child: TextField(
                                     obscureText: false,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Alamat tujuan'),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
+                                    onChanged: (String _val) {
+                                      alamatTujuan = _val;
+                                    },
                                   ),
                                 ),
                               ],
@@ -133,39 +163,82 @@ class _BuatPesananState extends State<BuatPesanan> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // FIELD NAMA LENGKAP
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Nama Lengkap'),
-                              style: TextStyle(fontSize: 20),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                labelText: 'Nama Lengkap',
+                                hintText: 'Masukan nama lengkap',
+                                errorBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                namaLengkap = _val;
+                              },
                             ),
                           ),
+
+                          // FIELD NO HP
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Nomor Handphone'),
-                              style: TextStyle(fontSize: 20),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                labelText: 'No Telepon',
+                                hintText: 'Masukan nomor telepon',
+                                errorBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                nomorHp = _val;
+                              },
                             ),
                           ),
+
+                          // FIELD ALAMAT
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
-                            child: const TextField(
+                            child: TextField(
                               obscureText: false,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Alamat Lengkap'),
-                              style: TextStyle(fontSize: 20),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                labelText: 'Alamat Lengkap',
+                                hintText: 'Masukan alamat lengkap',
+                                errorBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              style: const TextStyle(fontSize: 20),
+                              onChanged: (String _val) {
+                                alamatLengkap = _val;
+                              },
                             ),
                           ),
+
+                          // FOTO
                           Container(
                               color: Colors.white,
                               margin: const EdgeInsets.only(bottom: 10),
@@ -200,16 +273,26 @@ class _BuatPesananState extends State<BuatPesanan> {
                             margin: const EdgeInsets.only(bottom: 10),
                             child: const SizedBox(height: 20),
                           ),
+
+                          // BUTTON BUAT PESANAN
                           ElevatedButton(
                             onPressed: () => {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return const HomePageCustomer();
-                              }))
+                              })),
+                              db.collection('orders').add({
+                                'alamat': alamatLengkap,
+                                'no_telepon': nomorHp,
+                                'penerima': namaLengkap,
+                                'penjemputan': dikirimDari,
+                                'tujuan': alamatTujuan,
+                                'foto_barang': image
+                              })
                             },
                             child: const Text("BUAT PESANAN"),
                             style: style,
-                          )
+                          ),
                         ],
                       ),
                     ))),

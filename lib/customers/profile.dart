@@ -65,8 +65,6 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
         backgroundColor: const Color.fromARGB(255, 160, 149, 237),
       ),
       body: ListView(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [
@@ -120,10 +118,7 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
                   border: Border.all(
                     color: const Color.fromARGB(255, 160, 149, 237),
                     width: 2,
-                  )
-                  // color: Color.fromARGB(255, 167, 81, 81),
-
-                  ),
+                  )),
               child: Column(children: const [
                 ListTile(
                     leading: Icon(Icons.person),
@@ -151,14 +146,17 @@ class _ProfileCustomerState extends State<ProfileCustomer> {
               ]),
             ),
           ),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const LandingPage();
-                }));
-              },
-              style: style,
-              child: const Text("Logout")),
+          Container(
+            margin: const EdgeInsets.all(20),
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const LandingPage();
+                  }));
+                },
+                style: style,
+                child: const Text("Logout")),
+          ),
           const SizedBox(
             height: 365,
           ),

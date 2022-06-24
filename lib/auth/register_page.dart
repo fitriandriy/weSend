@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wesend/auth/profile_page.dart';
 import 'package:wesend/auth/validator.dart';
 import 'package:wesend/auth/fire_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -22,6 +23,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+
+  final db = FirebaseFirestore.instance;
+  String? namaLengkap;
+  String? email;
+  String? password;
+  String? alamat;
+  String? nomorHp;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   key: _registerFormKey,
                   child: Column(
                     children: <Widget>[
+                      // FORM NAMA
                       TextFormField(
                         controller: _nameTextController,
                         focusNode: _focusName,
@@ -72,9 +81,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        onChanged: (String _val) {
+                          namaLengkap = _val;
+                        },
                         style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 16.0),
+
+                      // FORM EMAIL
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
@@ -93,9 +107,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        onChanged: (String _val) {
+                          email = _val;
+                        },
                         style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 16.0),
+
+                      // FORM PASSWORD
                       TextFormField(
                         controller: _passwordTextController,
                         focusNode: _focusPassword,
@@ -115,16 +134,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        onChanged: (String _val) {
+                          password = _val;
+                        },
                         style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 16.0),
+
+                      // FORM ALAMAT
                       TextFormField(
-                        // controller: _passwordTextController,
-                        // focusNode: _focusPassword,
                         obscureText: false,
-                        // validator: (value) => Validator.validatePassword(
-                        //   password: value,
-                        // ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
@@ -137,16 +156,16 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        onChanged: (String _val) {
+                          alamat = _val;
+                        },
                         style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 16.0),
+
+                      // FORM NOMOR HP
                       TextFormField(
-                        // controller: _passwordTextController,
-                        // focusNode: _focusPassword,
                         obscureText: false,
-                        // validator: (value) => Validator.validatePassword(
-                        //   password: value,
-                        // ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20)),
@@ -159,14 +178,20 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        onChanged: (String _val) {
+                          nomorHp = _val;
+                        },
                         style: const TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 32.0),
+
+                      // IS PROCESSING?
                       _isProcessing
                           ? const CircularProgressIndicator()
                           : Row(
                               children: [
                                 Expanded(
+                                  // TOMBOL DAFTAR
                                   child: ElevatedButton(
                                     style: style,
                                     onPressed: () async {
@@ -199,6 +224,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                           );
                                         }
                                       }
+
+                                      db.collection('customers').add({
+                                        'nama': namaLengkap,
+                                        'email': email,
+                                        'password': password,
+                                        'alamat': alamat,
+                                        'no_telepon': nomorHp
+                                      });
                                     },
                                     child: const Text(
                                       'DAFTAR',

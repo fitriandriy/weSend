@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wesend/auth/login_page.dart';
-// import 'package:wesend/auth/fire_auth.dart';
 import 'package:wesend/customers/homepage.dart';
 import 'package:wesend/customers/chat.dart';
-// import 'package:wesend/landing_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -13,6 +12,10 @@ class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
+final db = FirebaseFirestore.instance;
+String? noTelepon;
+String? alamat;
 
 class _ProfilePageState extends State<ProfilePage> {
   // bool _isSendingVerification = false;
@@ -47,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   toProfilePage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return ProfilePage(user: _currentUser);
+      return const LoginPage();
     }));
   }
 
@@ -141,18 +144,55 @@ class _ProfilePageState extends State<ProfilePage> {
                       subtitle: Text('${_currentUser.email}',
                           style: const TextStyle(fontSize: 20))),
                   const Divider(),
-                  const ListTile(
-                      leading: Icon(Icons.phone),
-                      title:
-                          Text('No. Telepon', style: TextStyle(fontSize: 20)),
-                      subtitle: Text('+6285232128433',
-                          style: TextStyle(fontSize: 20))),
-                  const Divider(),
-                  const ListTile(
-                      leading: Icon(Icons.home),
-                      title: Text('Alamat', style: TextStyle(fontSize: 20)),
-                      subtitle:
-                          Text('Jl. Menanjak', style: TextStyle(fontSize: 20))),
+                  StreamBuilder(
+                      stream: db.collection('customers').snapshots(),
+                      builder: (BuildContext contect, AsyncSnapshot snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data?.docs.length,
+                          itemBuilder: (context, int index) {
+                            DocumentSnapshot documentSnapshot =
+                                snapshot.data.docs[index];
+
+                            if (snapshot.data.docs[index]['nama'] ==
+                                '${_currentUser.displayName}') {
+                              return Column(
+                                children: [
+                                  ListTile(
+                                      leading: const Icon(Icons.phone),
+                                      title: const Text('No. Telepon',
+                                          style: TextStyle(fontSize: 20)),
+                                      subtitle: Text(
+                                          documentSnapshot['no_telepon'],
+                                          style:
+                                              const TextStyle(fontSize: 20))),
+                                  const Divider(),
+                                  ListTile(
+                                      leading: const Icon(Icons.home),
+                                      title: const Text('Alamat',
+                                          style: TextStyle(fontSize: 20)),
+                                      subtitle: Text(documentSnapshot['alamat'],
+                                          style:
+                                              const TextStyle(fontSize: 20))),
+                                ],
+                              );
+                            } else {
+                              return Stack(
+                                children: [
+                                  Container(width: 0.5, color: Colors.white)
+                                ],
+                              );
+                            }
+                          },
+                        );
+                      })
                 ]),
               ),
             ),
@@ -160,23 +200,26 @@ class _ProfilePageState extends State<ProfilePage> {
             // LOGOUT BUTTON
             _isSigningOut
                 ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _isSigningOut = true;
-                      });
-                      await FirebaseAuth.instance.signOut();
-                      setState(() {
-                        _isSigningOut = false;
-                      });
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
-                    },
-                    child: const Text('KELUAR'),
-                    style: style,
+                : Container(
+                    margin: const EdgeInsets.all(6),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isSigningOut = true;
+                        });
+                        await FirebaseAuth.instance.signOut();
+                        setState(() {
+                          _isSigningOut = false;
+                        });
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      child: const Text('KELUAR'),
+                      style: style,
+                    ),
                   )
           ],
         ),
