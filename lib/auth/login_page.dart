@@ -63,8 +63,7 @@ class _LoginPageState extends State<LoginPage> {
             if (snapshot.connectionState == ConnectionState.done) {
               return Padding(
                 padding: const EdgeInsets.only(left: 50, right: 50),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
                   children: [
                     Padding(
                         padding: const EdgeInsets.only(bottom: 24.0),
@@ -73,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     Form(
                       key: _formKey,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           TextFormField(
                               controller: _emailTextController,
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                           Container(
-                            margin: const EdgeInsets.only(top: 80, bottom: 100),
+                            margin: const EdgeInsets.only(top: 20, bottom: 100),
                             padding: const EdgeInsets.only(top: 20),
                             child: Column(children: [
                               const Text("Belum memiliki akun?",

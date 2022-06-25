@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wesend/customers/homepage.dart';
+import 'package:wesend/camera/home.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,7 +24,7 @@ File? fotoBarang;
 class _BuatPesananState extends State<BuatPesanan> {
   final ButtonStyle style = ElevatedButton.styleFrom(
     padding: const EdgeInsets.all(15),
-    textStyle: const TextStyle(fontSize: 24),
+    textStyle: const TextStyle(fontSize: 20),
     primary: const Color.fromARGB(255, 160, 149, 237),
     fixedSize: const Size.fromWidth(278),
   );
@@ -39,6 +40,7 @@ class _BuatPesananState extends State<BuatPesanan> {
       final imageTemp = File(image.path);
 
       setState(() => this.image = imageTemp);
+      setState(() => fotoBarang = this.image);
     } on PlatformException catch (e) {
       return AlertDialog(
         title: const Text('Failed to pick image'),
@@ -238,36 +240,6 @@ class _BuatPesananState extends State<BuatPesanan> {
                             ),
                           ),
 
-                          // FOTO
-                          Container(
-                              color: Colors.white,
-                              margin: const EdgeInsets.only(bottom: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text("Masukan Foto Barang",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: Color.fromARGB(
-                                              255, 118, 116, 116))),
-                                  IconButton(
-                                      onPressed: () {
-                                        pickImageC();
-                                      },
-                                      icon: const Icon(
-                                        Icons.camera_alt,
-                                        size: 40,
-                                      ))
-                                ],
-                              )),
-                          Container(
-                            child: image != null
-                                ? Image.file(image!)
-                                : const Text("No image selected",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(
-                                            255, 118, 116, 116))),
-                          ),
                           Container(
                             color: Colors.white,
                             margin: const EdgeInsets.only(bottom: 10),
@@ -287,7 +259,9 @@ class _BuatPesananState extends State<BuatPesanan> {
                                 'penerima': namaLengkap,
                                 'penjemputan': dikirimDari,
                                 'tujuan': alamatTujuan,
-                                'foto_barang': image
+                                'berat_barang': 0,
+                                'biaya': null,
+                                'status': 'Baru'
                               })
                             },
                             child: const Text("BUAT PESANAN"),

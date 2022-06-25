@@ -31,7 +31,7 @@ class _LandingPageState extends State<LandingPage> {
             children: [
               Image.asset('images/driver-icon.png'),
               Container(
-                  margin: const EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.all(10),
                   child: (ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,

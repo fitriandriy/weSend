@@ -49,18 +49,18 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
-          padding: const EdgeInsets.only(left: 50, right: 50),
+          padding: const EdgeInsets.only(left: 20, right: 20),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: ListView(
               children: [
                 Container(
-                    margin: const EdgeInsets.only(bottom: 50),
+                    margin: const EdgeInsets.only(bottom: 10),
                     child: Image.asset('images/driver-icon-white.png',
-                        height: 350)),
+                        height: 250)),
                 Form(
                   key: _registerFormKey,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       // FORM NAMA
                       TextFormField(
@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(height: 10),
 
                       // FORM EMAIL
                       TextFormField(
@@ -112,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(height: 10),
 
                       // FORM PASSWORD
                       TextFormField(
@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(height: 10),
 
                       // FORM ALAMAT
                       TextFormField(
@@ -161,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 16.0),
+                      const SizedBox(height: 10),
 
                       // FORM NOMOR HP
                       TextFormField(
@@ -183,7 +183,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         style: const TextStyle(fontSize: 20),
                       ),
-                      const SizedBox(height: 32.0),
+                      const SizedBox(height: 10.0),
 
                       // IS PROCESSING?
                       _isProcessing
@@ -239,6 +239,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                   ),
                                 ),
+                                const SizedBox(
+                                  height: 20,
+                                )
                               ],
                             )
                     ],
